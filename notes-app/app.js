@@ -37,7 +37,8 @@ if (command === 'add') {
         console.log("no note with title ", argv.title);
     }
 } else if (command === 'remove') {
-    notes.removeNote(argv.title);
+    var noteRemoved = notes.removeNote(argv.title);
+    var msg = noteRemoved ? 'Note was removed' : 'Note not found';
 } else {
     console.log('command not recognized');
 }
