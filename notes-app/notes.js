@@ -15,7 +15,8 @@ var addNote = (title, body) => {
 
     if (isNotDuplicateTitle(title, notes)) {
       notes.push(note);
-      fs.writeFileSync('notes-data.json', JSON.stringify(notes));
+      saveNotes(notes);
+      return note;
     } else {
       console.log('duplicate title -- note not added');
     }
@@ -30,26 +31,39 @@ var addNote = (title, body) => {
 
 var getNote = (title) => {
   console.log('getting note', title);
+  var notes = fetchNotesFileAsArray();
+  let modNotes = notes.filter(note => note.title === title);
+  return modNotes[0];
 };
 
 var removeNote = (title) => {
   console.log('remove note', title);
+  var notes = fetchNotesFileAsArray();
+  let modNotes = notes.filter(note => note.title !== title);
+  saveNotes(modNotes);
 };
 
 var getAll = () => {
   console.log('get all notes');
+  return fetchNotesFileAsArray();
 };
 
 var fetchNotesFileAsArray = () => {
-  var notes = null;
   try {
     var notesStr = fs.readFileSync('notes-data.json');
-    notes = JSON.parse(notesStr);
+    return JSON.parse(notesStr);
   }catch (e) {
-    notes = [];
+    return [];
   }
+};
 
-  return notes;
+var saveNotes = (notes) => {
+  try {
+    fs.writeFileSync('notes-data.json', JSON.stringify(notes));
+  }catch(e){
+    console.log("unable to save notes");
+    console.log(e);
+  }
 };
 
 var isNotDuplicateTitle = (title, notes) => {

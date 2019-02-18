@@ -14,11 +14,28 @@ console.log('Yargs: ', argv);
 console.log('Command: ', command);
 
 if (command === 'add') {
-    notes.addNote(argv.title, argv.body);
+    var note = notes.addNote(argv.title, argv.body);
+    // if (_.isUndefined(note) || _.isNull(note)) {
+    //     console.log("note not added");
+    // }else {
+    //     console.log("Note added with title: ", note.title);
+    // }
+    if (note){
+        console.log("Note added with title: ", note.title);
+    } else {
+        console.log("note not added");
+    }
+
 } else if (command === 'list') {
-    notes.getAll();
+    var myNotes = notes.getAll();
+    console.log(myNotes);
 } else if (command === 'read') {
-    notes.getNote(argv.title);
+    var note = notes.getNote(argv.title);
+    if (note){
+        console.log("Note fetched: ", note.title, note.body);
+    } else {
+        console.log("no note with title ", argv.title);
+    }
 } else if (command === 'remove') {
     notes.removeNote(argv.title);
 } else {
