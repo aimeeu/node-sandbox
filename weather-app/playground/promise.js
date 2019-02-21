@@ -13,7 +13,14 @@ var asyncAdd = (a, b) => {
 
 asyncAdd(50,100).then((result) => {
     console.log('Result:', result);
+    // chain promise
+    return asyncAdd(result, 33);
 }, (errorMessage) => {
+    console.log('Error: ', errorMessage);
+}).then((res) => {
+    //this is for processing 'return asyncAdd'
+    console.log('should be 183 ', res);
+    }, () => {
     console.log('Error: ', errorMessage);
 });
 
