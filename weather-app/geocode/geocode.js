@@ -20,7 +20,7 @@ var fetchGeocode = (address, callback) => {
         qs: queryStr,
         json: true
     }, (error, response, body) => {
-        //console.log(JSON.stringify(body, undefined, 2));
+        console.log(JSON.stringify(response, undefined, 2));
         if (!error && response.statusCode === 200) {
             callback(undefined, {
                 address: body.results[0].locations[0].street + ', ' + body.results[0].locations[0].adminArea5 + ', ' + body.results[0].locations[0].adminArea3 + '  ' + body.results[0].locations[0].postalCode,
