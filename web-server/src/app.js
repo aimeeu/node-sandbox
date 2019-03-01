@@ -12,35 +12,13 @@ const app = express();
 // customize to serve up static pages in public directory
 app.use(express.static(path.join(__dirname, '../public')));
 
-// routes:
+// static routes served from public dir:
 // app.com
 // app.com/help
 // app.com/about
+
+// dynamic routes:
 // app.com/weather
-
-app.get('', (req, res) => {
-    res.send('<h1>Hello Express!</h1>');
-});
-
-
-app.get('/help', (req, res) => {
-    let body = [
-        {
-            name: 'aimee',
-            age: 51
-        },
-        {
-            name: 'bubba',
-            age: 4
-        }
-    ];
-    res.status(200).send(body);
-});
-
-
-app.get('/about', (req, res) => {
-    res.send('<h1>About Us</h1>');
-});
 
 app.get('/weather', (req, res) => {
     let address = '12130 W Wren Court, Milwaukee, Wisconsin';
