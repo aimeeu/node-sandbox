@@ -1,8 +1,16 @@
+//core modules
+const path = require('path');
+//third-party modules
 const express = require('express');
+//app modules
 const geocode = require('./utils/geocode');
 const weather = require('./utils/weather.js');
 
+//init express
 const app = express();
+
+// customize to serve up static pages in public directory
+app.use(express.static(path.join(__dirname, '../public')));
 
 // routes:
 // app.com
