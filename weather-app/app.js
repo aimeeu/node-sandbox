@@ -1,7 +1,7 @@
 const yargs = require('yargs');
 
-const geocode = require('./geocode/geocode');
-const weather = require('./weather/weather.js');
+const geocode = require('./utils/geocode');
+const weather = require('./utils/weather.js');
 
 const argv = yargs
     .options({
@@ -16,26 +16,25 @@ const argv = yargs
     .alias('help', 'h')
     .argv;
 
-console.log(argv);
+//console.log(argv);
 if (!argv.a) {
     console.log('missing address; aborting');
 } else {
-    geocode.fetchGeocode(argv.a, (errorMessage, results) => {
+    geocode.fetchGeocode(argv.a, (errorMessage, {latitude, longitude, location}) => {
         if (errorMessage) {
-            console.log(`Fetch geocode error ${errorMessage}`);
-        } else {
-            //console.log(JSON.stringify(results, undefined, 2));
-            console.log(`Address: ${results.address}`);
-            console.log(`Lat: ${results.lat}  Lng: ${results.lng}`);
-            weather.fetchWeather(results.lat, results.lng, (errorMsg, weatherResults) => {
-                if (errorMessage) {
-                    console.log(`Fetch weather error ${errorMessage}`);
-                } else {
-                    console.log(`Temp: ${weatherResults.temperature}`);
-                    console.log(`Feels like: ${weatherResults.apparentTemperature}`);
-                }
-            });
+            return console.log(`Fetch geocode error ${errorMessage}`);
         }
+        //console.log(JSON.stringify(results, undefined, 2));
+        console.log(`Address: ${location}`);
+        console.log(`Lat: ${latitude}  Lng: ${longitude}`);
+        weather.fetchWeather(latitude, longitude, (errorMsg, forecastData) => {
+            if (errorMessage) {
+                console.log(`Fetch weather error ${errorMessage}`);
+            } else {
+                console.log(forecastData);
+            }
+        });
+
     });
 }
 

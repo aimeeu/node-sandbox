@@ -17,7 +17,7 @@ const argv = yargs
     .alias('help', 'h')
     .argv;
 
-var encodedAddr = encodeURIComponent(argv.a);
+//var encodedAddr = encodeURIComponent(argv.a);
 const mapquestUrl = 'http://www.mapquestapi.com/geocoding/v1/address';
 
 axios.get(mapquestUrl
@@ -44,6 +44,7 @@ axios.get(mapquestUrl
     //console.log('forecast response data', JSON.stringify(response.data));
     console.log(`Temp: ${response.data.currently.temperature}`);
     console.log(`Feels like: ${response.data.currently.apparentTemperature}`);
+    console.log(`Forecast: ${response.data.daily.summary}`);
 }).catch((e) => {
     console.log('Unable to fetch weather', e);
 });

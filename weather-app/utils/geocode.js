@@ -5,7 +5,7 @@ const mapquestUrl = 'http://www.mapquestapi.com/geocoding/v1/address';
 
 const request = require('request');
 
-var fetchGeocode = (address, callback) => {
+const fetchGeocode = (address, callback) => {
     // using the qs parm in request encodes the query string, so do not do it here!
     var queryStr = {
         key: mapquestApiKey,
@@ -19,13 +19,14 @@ var fetchGeocode = (address, callback) => {
         url: mapquestUrl,
         qs: queryStr,
         json: true
-    }, (error, response, body) => {
-        console.log(JSON.stringify(response, undefined, 2));
+    }, (error, response ) => {
+        //console.log(JSON.stringify(response, undefined, 2));
         if (!error && response.statusCode === 200) {
+            let body = response.body;
             callback(undefined, {
-                address: body.results[0].locations[0].street + ', ' + body.results[0].locations[0].adminArea5 + ', ' + body.results[0].locations[0].adminArea3 + '  ' + body.results[0].locations[0].postalCode,
-                lat: body.results[0].locations[0].displayLatLng.lat,
-                lng: body.results[0].locations[0].displayLatLng.lng
+                location: response.body.results[0].locations[0].street + ', ' + body.results[0].locations[0].adminArea5 + ', ' + body.results[0].locations[0].adminArea3 + '  ' + body.results[0].locations[0].postalCode,
+                latitude: response.body.results[0].locations[0].displayLatLng.lat,
+                longitude: response.body.results[0].locations[0].displayLatLng.lng
             })
 
         } else {
