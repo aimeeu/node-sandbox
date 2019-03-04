@@ -53,12 +53,20 @@ app.get('/help', (req, res) => {
 });
 
 app.get('/weather', (req, res) => {
-    let address = '12130 W Wren Court, Milwaukee, Wisconsin';
-    geocode.fetchGeocode(address, (errorMessage, {latitude, longitude, location}) => {
+    if (!req.query.address) {
+        return res.statusCode(503).send( {
+            error: "Must provide an address"
+        });
+    }
+
+    //let address = '12130 W Wren Court, Milwaukee, Wisconsin';
+    let address = req.query.address;
+    geocode.fetchGeocode(address, (errorMessage, {latitude, longitude, location} = {} ) => {
         if (errorMessage) {
             console.log(`Fetch geocode error ${errorMessage}`);
-            res.status(503).send(`Error fetching location: ${errorMessage}`);
-            return;
+            return res.status(503).send( {
+                errorMessage
+            });
         }
         //console.log(JSON.stringify(results, undefined, 2));
         console.log(`Address: ${location}`);
@@ -66,7 +74,9 @@ app.get('/weather', (req, res) => {
         weather.fetchWeather(latitude, longitude, (errorMsg, forecastData) => {
             if (errorMessage) {
                 console.log(`Fetch weather error ${errorMessage}`);
-                res.status(503).send(`Fetch weather error: ${errorMessage}`);
+                res.status(400).send( {
+                    errorMessage
+                });
             } else {
                 console.log(forecastData);
                 body = {
@@ -82,12 +92,14 @@ app.get('/weather', (req, res) => {
     });
 });
 
+
+
 // must be listed last; this matches anything that isn't listed above
 app.get('*', (req, res) => {
     res.render('404', {
         title: 'Page Not Found',
         name: 'aimee',
-        errorMessage: 'Hmmmmm, something is rotten in Denmark...'
+        errorMessage: 'Danger Will Robinson!'
     })
 });
 

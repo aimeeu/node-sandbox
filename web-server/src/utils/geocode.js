@@ -2,7 +2,6 @@ const mapquestApiKey = 'SKeP3szrL5xhAmoFus492tZe0sNuoYU6';
 const mapquestUrl = 'http://www.mapquestapi.com/geocoding/v1/address';
 // ?key=SKeP3szrL5xhAmoFus492tZe0sNuoYU6&location=1301%20Lombard%20Street%20Philadelphia
 
-
 const request = require('request');
 
 const fetchGeocode = (address, callback) => {
@@ -23,6 +22,9 @@ const fetchGeocode = (address, callback) => {
         //console.log(JSON.stringify(response, undefined, 2));
         if (!error && response.statusCode === 200) {
             let body = response.body;
+            if (! body || body.length === 0){
+                return callback('Invalid Address', undefined);
+            }
             callback(undefined, {
                 location: response.body.results[0].locations[0].street + ', ' + body.results[0].locations[0].adminArea5 + ', ' + body.results[0].locations[0].adminArea3 + '  ' + body.results[0].locations[0].postalCode,
                 latitude: response.body.results[0].locations[0].displayLatLng.lat,
@@ -30,7 +32,7 @@ const fetchGeocode = (address, callback) => {
             })
 
         } else {
-            callback('Unable to connect to MapQuest');
+            callback('Unable to connect to MapQuest', undefined);
         }
     });
 };
