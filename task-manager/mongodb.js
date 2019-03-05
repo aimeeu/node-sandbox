@@ -17,45 +17,31 @@ MongoClient.connect(conUrl, {useNewUrlParser: true}, (error, client) => {
     }
     console.log('connected correctly');
     const db = client.db(dbName);
-    db.collection('users').insertOne({
-        _id: id,
-        name: 'Betty',
-        age: 12
-    }, (error, result) => {
-        if (error){
-            return console('unable to insert user', error);
+
+    db.collection('users').findOne({name: 'Betty'}, (error, user) => {
+        if (error) {
+            return console.log('unable to fetch user', error);
         }
-        console.log(result.ops);
-    })
+        console.log(user);
+    });
 
-    // db.collection('users').insertMany([
-    //     {
-    //         name: 'Jethro', age: 30
-    //     },
-    //     {
-    //         name: 'Holly', age: 27
-    //     }
-    // ], (error, result) => {
-    //     if (error) {
-    //         return console('unable to insert user', error);
-    //     }
-    //     console.log(result.ops);
-    // });
+    // find returns a cursor
+    db.collection('users').find({age: 12}).toArray((error, users) => {
+        console.log(users);
+    });
 
-    // db.collection('tasks').insertMany( [
-    //     {
-    //         description: 'task one', completed: true
-    //     },
-    //     {
-    //         description: 'task 2', completed: false
-    //     },
-    //     {
-    //         description: 'task 3', completed: true
-    //     }
-    // ], (error, result) => {
-    //     if (error) {
-    //         return console('unable to insert user', error);
-    //     }
-    //     console.log(result.ops);
-    // });
+    db.collection('users').find({age: 12}).count((error, count) => {
+        console.log(count);
+    });
+
+    db.collection('tasks').findOne({ _id: new ObjectID("5c7ec2965a1d857c722883ef")}, (error, task) => {
+        if (error) {
+            return console.log('unable to fetch task', error);
+        }
+        console.log(task);
+    });
+
+    db.collection('tasks').find({completed: true}).toArray((error, tasks) => {
+        console.log(tasks);
+    });
 });
